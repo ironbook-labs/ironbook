@@ -34,6 +34,27 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
 
+      # Enforce that releases are signed with the organization/project
+      # signing key (never a personal key). The expected fingerprint is
+      # configured by maintainers as the RELEASE_GPG_FINGERPRINT
+      # repository variable; the build fails if the imported key differs.
+      - name: Verify organization signing key
+        run: |
+          expected="${{ vars.RELEASE_GPG_FINGERPRINT }}"
+          actual="${{ steps.import_gpg.outputs.fingerprint }}"
+
+          if [[ -z "$expected" ]]; then
+            echo "::error::RELEASE_GPG_FINGERPRINT repository variable is not set. Configure it with the organization signing key fingerprint."
+            exit 1
+          fi
+
+          if [[ "$actual" != "$expected" ]]; then
+            echo "::error::Imported GPG key fingerprint ($actual) does not match the organization signing key ($expected). Refusing to sign releases."
+            exit 1
+          fi
+
+          echo "Signing with organization key: $actual"
+
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEY }}
