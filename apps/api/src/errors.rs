@@ -27,12 +27,6 @@ pub enum AppError {
     #[error("Invalid owner email")]
     InvalidOwnerEmail,
 
-    #[error("API token name already exists")]
-    ApiTokenNameAlreadyExists,
-
-    #[error("API token owner email already exists")]
-    ApiTokenOwnerEmailAlreadyExists,
-
     #[error("Database error: {0}")]
     DatabaseError(#[from] sqlx::Error),
 
@@ -49,8 +43,6 @@ impl AppError {
             AppError::InvalidCredentials => 1004,
             AppError::InvalidName => 1005,
             AppError::InvalidOwnerEmail => 1006,
-            AppError::ApiTokenNameAlreadyExists => 1007,
-            AppError::ApiTokenOwnerEmailAlreadyExists => 1008,
             AppError::DatabaseError(_) => 5000,
             AppError::Internal(_) => 5001,
         }
@@ -64,10 +56,7 @@ impl AppError {
             AppError::UsernameAlreadyExists | AppError::EmailAlreadyExists => {
                 tonic::Code::AlreadyExists
             }
-            AppError::InvalidName
-            | AppError::InvalidOwnerEmail
-            | AppError::ApiTokenNameAlreadyExists
-            | AppError::ApiTokenOwnerEmailAlreadyExists => tonic::Code::InvalidArgument,
+            AppError::InvalidName | AppError::InvalidOwnerEmail => tonic::Code::InvalidArgument,
             AppError::DatabaseError(_) | AppError::Internal(_) => tonic::Code::Internal,
         };
 
@@ -78,10 +67,7 @@ impl AppError {
         match self {
             AppError::InvalidApiToken | AppError::InvalidCredentials => StatusCode::UNAUTHORIZED,
             AppError::UsernameAlreadyExists | AppError::EmailAlreadyExists => StatusCode::CONFLICT,
-            AppError::InvalidName
-            | AppError::InvalidOwnerEmail
-            | AppError::ApiTokenNameAlreadyExists
-            | AppError::ApiTokenOwnerEmailAlreadyExists => StatusCode::BAD_REQUEST,
+            AppError::InvalidName | AppError::InvalidOwnerEmail => StatusCode::BAD_REQUEST,
             AppError::DatabaseError(_) | AppError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }

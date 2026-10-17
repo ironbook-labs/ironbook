@@ -13,8 +13,6 @@ fn error_codes_are_stable() {
         (AppError::InvalidCredentials, 1004),
         (AppError::InvalidName, 1005),
         (AppError::InvalidOwnerEmail, 1006),
-        (AppError::ApiTokenNameAlreadyExists, 1007),
-        (AppError::ApiTokenOwnerEmailAlreadyExists, 1008),
     ];
 
     for (error, expected) in cases {
@@ -54,14 +52,6 @@ fn http_status_mapping_is_correct() {
         StatusCode::BAD_REQUEST
     );
     assert_eq!(
-        AppError::ApiTokenNameAlreadyExists.http_status(),
-        StatusCode::BAD_REQUEST
-    );
-    assert_eq!(
-        AppError::ApiTokenOwnerEmailAlreadyExists.http_status(),
-        StatusCode::BAD_REQUEST
-    );
-    assert_eq!(
         AppError::DatabaseError(sqlx::Error::RowNotFound).http_status(),
         StatusCode::INTERNAL_SERVER_ERROR
     );
@@ -95,16 +85,6 @@ fn grpc_status_mapping_is_correct() {
     );
     assert_eq!(
         AppError::InvalidOwnerEmail.to_grpc_status().code(),
-        Code::InvalidArgument
-    );
-    assert_eq!(
-        AppError::ApiTokenNameAlreadyExists.to_grpc_status().code(),
-        Code::InvalidArgument
-    );
-    assert_eq!(
-        AppError::ApiTokenOwnerEmailAlreadyExists
-            .to_grpc_status()
-            .code(),
         Code::InvalidArgument
     );
     assert_eq!(

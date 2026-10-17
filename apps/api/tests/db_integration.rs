@@ -191,18 +191,6 @@ async fn system_first_start_and_api_token_storage_work(pool: PgPool) {
     );
 
     assert!(!db::system::is_first_start(&state).await.unwrap());
-    assert_eq!(
-        db::system::get_api_token_by_name(&state, " client-one ")
-            .await
-            .unwrap(),
-        Some("abcdefghijklmnopqrstuvwxyz123456".into())
-    );
-    assert_eq!(
-        db::system::get_api_token_by_owner_email(&state, " owner@example.com ")
-            .await
-            .unwrap(),
-        Some("abcdefghijklmnopqrstuvwxyz123456".into())
-    );
 }
 
 #[sqlx::test(migrations = false)]
@@ -495,39 +483,4 @@ async fn generate_api_token_enforces_validation_and_existing_token_auth(pool: Pg
     .await
     .unwrap_err();
     assert!(matches!(invalid_api, AppError::InvalidApiToken));
-
-    let existing_token = db::system::get_api_token_by_name(&state, "first")
-        .await
-        .unwrap()
-        .unwrap();
-
-    let duplicate_name = services::system::generate_api_token(
-        &state,
-        Some(&existing_token),
-        services::system::ApiTokenRequest {
-            name: "first".into(),
-            owner_email: "other@example.com".into(),
-        },
-    )
-    .await
-    .unwrap_err();
-    assert!(matches!(
-        duplicate_name,
-        AppError::ApiTokenNameAlreadyExists
-    ));
-
-    let duplicate_owner = services::system::generate_api_token(
-        &state,
-        Some(&existing_token),
-        services::system::ApiTokenRequest {
-            name: "second".into(),
-            owner_email: "owner@example.com".into(),
-        },
-    )
-    .await
-    .unwrap_err();
-    assert!(matches!(
-        duplicate_owner,
-        AppError::ApiTokenOwnerEmailAlreadyExists
-    ));
 }

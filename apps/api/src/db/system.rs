@@ -17,42 +17,6 @@ pub async fn is_first_start(state: &AppState) -> Result<bool, AppError> {
     Ok(count.unwrap_or(0) == 0)
 }
 
-pub async fn get_api_token_by_name(
-    state: &AppState,
-    name: &str,
-) -> Result<Option<String>, AppError> {
-    let api_token = sqlx::query_scalar!(
-        r#"
-        SELECT api_token
-        FROM clients
-        WHERE name = $1
-        "#,
-        name.trim()
-    )
-    .fetch_optional(&state.db)
-    .await?;
-
-    Ok(api_token)
-}
-
-pub async fn get_api_token_by_owner_email(
-    state: &AppState,
-    owner_email: &str,
-) -> Result<Option<String>, AppError> {
-    let api_token = sqlx::query_scalar!(
-        r#"
-        SELECT api_token
-        FROM clients
-        WHERE owner_email = $1
-        "#,
-        owner_email.trim()
-    )
-    .fetch_optional(&state.db)
-    .await?;
-
-    Ok(api_token)
-}
-
 pub async fn store_api_token(
     state: &AppState,
     data: system::ApiTokenRequest,

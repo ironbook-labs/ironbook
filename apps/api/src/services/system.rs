@@ -65,18 +65,6 @@ pub async fn generate_api_token(
         if data.owner_email.trim().is_empty() {
             return Err(AppError::InvalidOwnerEmail);
         }
-        if system::get_api_token_by_name(state, &data.name)
-            .await?
-            .is_some()
-        {
-            return Err(AppError::ApiTokenNameAlreadyExists);
-        }
-        if system::get_api_token_by_owner_email(state, &data.owner_email)
-            .await?
-            .is_some()
-        {
-            return Err(AppError::ApiTokenOwnerEmailAlreadyExists);
-        }
 
         let token = Alphanumeric.sample_string(&mut rand::rng(), 32);
         system::store_api_token(state, data, &token).await?;
