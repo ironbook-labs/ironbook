@@ -1,5 +1,0 @@
-@base_url = http://127.0.0.1:8000
-
-GET {{base_url}}/
-
-GET {{base_url}}/health
