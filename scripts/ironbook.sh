@@ -45,7 +45,9 @@ case "$COMMAND" in
         ;;
 
     setup)
-        source "$SCRIPTS_DIR/setup/setup.sh"
+        shift
+        # shellcheck source=/dev/null
+        source "$SCRIPTS_DIR/setup/setup.sh" "$@"
         ;;
 
     help|--help|-h)

@@ -37,12 +37,15 @@ install_system_packages() {
                 packages+=(mingw-w64-gcc)
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker)
-            fi
+            # Docker is only installed for the full setup; --minimal skips it.
+            if [[ "${SETUP_MINIMAL:-0}" -eq 0 ]]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker)
+                fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose)
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose)
+                fi
             fi
 
             if ! cmd_exists curl; then
@@ -69,12 +72,15 @@ install_system_packages() {
                 packages+=(gcc-mingw-w64-x86-64)
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker.io)
-            fi
+            # Docker is only installed for the full setup; --minimal skips it.
+            if [[ "${SETUP_MINIMAL:-0}" -eq 0 ]]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker.io)
+                fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose-v2)
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose-v2)
+                fi
             fi
 
             if ! cmd_exists curl; then
@@ -99,12 +105,15 @@ install_system_packages() {
                 packages+=(mingw64-gcc)
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker)
-            fi
+            # Docker is only installed for the full setup; --minimal skips it.
+            if [[ "${SETUP_MINIMAL:-0}" -eq 0 ]]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker)
+                fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose)
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose)
+                fi
             fi
 
             if ! cmd_exists curl; then
@@ -129,12 +138,15 @@ install_system_packages() {
                 packages+=(mingw64-cross-gcc)
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker)
-            fi
+            # Docker is only installed for the full setup; --minimal skips it.
+            if [[ "${SETUP_MINIMAL:-0}" -eq 0 ]]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker)
+                fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose)
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose)
+                fi
             fi
 
             if ! cmd_exists curl; then
@@ -181,14 +193,17 @@ check_system_commands() {
         missing=1
     fi
 
-    if ! cmd_exists docker; then
-        echo "❌ Required command not found: docker"
-        missing=1
-    fi
+    # Docker is only required for the full setup; --minimal skips it.
+    if [[ "${SETUP_MINIMAL:-0}" -eq 0 ]]; then
+        if ! cmd_exists docker; then
+            echo "❌ Required command not found: docker"
+            missing=1
+        fi
 
-    if ! docker compose version >/dev/null 2>&1; then
-        echo "❌ Docker Compose is not available."
-        missing=1
+        if ! docker compose version >/dev/null 2>&1; then
+            echo "❌ Docker Compose is not available."
+            missing=1
+        fi
     fi
 
     if ! cmd_exists curl; then

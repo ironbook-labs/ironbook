@@ -10,5 +10,8 @@ cmd_help() {
     echo "  build <ver> [options]   Build, package, and sign a release."
     echo "    --no-sign             Skip signing release files."
     echo "  help                    Show this help menu."
-    echo "  setup                   Sets up the project after being cloned."
+    echo "  setup [--minimal]       Sets up the project after being cloned."
+    echo "    --minimal             Only the bare minimum: env files, system checks,"
+    echo "                          and mise toolchains. Skips Docker, project"
+    echo "                          dependencies, and git hooks."
 }

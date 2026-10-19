@@ -45,12 +45,46 @@ run_as_root() {
 }
 
 # ==============================================================================
+# Options
+# ==============================================================================
+
+# --minimal: only do the bare minimum (environment files, system dependency
+# checks, mise toolchains). Docker, project dependencies (`mise run setup`),
+# and git hooks are skipped and get set up on demand instead (issue #199).
+SETUP_MINIMAL=0
+
+for setup_arg in "$@"; do
+    case "$setup_arg" in
+        --minimal)
+            SETUP_MINIMAL=1
+            ;;
+        -h|--help)
+            echo "Usage: ./ironbook.sh setup [--minimal]"
+            echo ""
+            echo "  --minimal   Only do the bare minimum: environment files,"
+            echo "              system dependency checks, and mise toolchains."
+            echo "              Skips Docker, project dependencies, and git hooks."
+            exit 0
+            ;;
+        *)
+            echo "❌ Unknown setup option: '$setup_arg'"
+            echo "Run './ironbook.sh setup --help' for usage."
+            exit 1
+            ;;
+    esac
+done
+
+# ==============================================================================
 # Main
 # ==============================================================================
 
 echo ""
 echo "========================================"
-echo " IronBook Development Environment Setup"
+if [[ "$SETUP_MINIMAL" -eq 1 ]]; then
+    echo " IronBook Minimal Environment Setup"
+else
+    echo " IronBook Development Environment Setup"
+fi
 echo "========================================"
 echo ""
 
@@ -67,28 +101,43 @@ echo ""
 echo "🔍 Checking system dependencies..."
 check_system_commands
 
-echo ""
-echo "🐳 Checking Docker..."
-setup_docker
+if [[ "$SETUP_MINIMAL" -eq 0 ]]; then
+    echo ""
+    echo "🐳 Checking Docker..."
+    setup_docker
+fi
 
 echo ""
 echo "🔧 Setting up mise..."
 setup_mise
 
-echo ""
-run_project_setup
+if [[ "$SETUP_MINIMAL" -eq 0 ]]; then
+    echo ""
+    run_project_setup
 
-echo ""
-setup_git_hooks
+    echo ""
+    setup_git_hooks
+fi
 
 echo ""
 echo "======================================================"
-echo " 🎉 Setup complete!"
+if [[ "$SETUP_MINIMAL" -eq 1 ]]; then
+    echo " 🎉 Minimal setup complete!"
+else
+    echo " 🎉 Setup complete!"
+fi
 echo "======================================================"
 echo ""
-echo "Don't forget to copy your Android signing keystore to:"
-echo ""
-echo "  $ANDROID_DIR/ironbook.keystore"
-echo ""
-echo "This is required to create a signed Android release."
-echo ""
+
+if [[ "$SETUP_MINIMAL" -eq 1 ]]; then
+    echo "Skipped: Docker, project dependencies, and git hooks."
+    echo "Run './ironbook.sh setup' (without --minimal) for the full setup."
+    echo ""
+else
+    echo "Don't forget to copy your Android signing keystore to:"
+    echo ""
+    echo "  $ANDROID_DIR/ironbook.keystore"
+    echo ""
+    echo "This is required to create a signed Android release."
+    echo ""
+fi

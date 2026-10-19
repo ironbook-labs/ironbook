@@ -1,4 +1,5 @@
 ### Added
+- [#199]: Added `--minimal` flag to `./ironbook.sh setup` for a bare-minimum setup (environment files, system dependency checks, mise toolchains), skipping Docker, project dependencies, and git hooks.
 - [#81]: Added `/docs/CODEOWNDERS`.
 - [#77]: Added structured versioned files for changelog.
 - [#133]: Added `Windows` setup section in relative documentation.
