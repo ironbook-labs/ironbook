@@ -23,9 +23,11 @@ jobs:
           install: true
           cache: true
 
+      - name: Set up cargo-binstall globally
+        run: mise use -g cargo-binstall
+
       - name: Run project setup script
-        run: |
-          scripts/ironbook.sh setup
+        run: scripts/ironbook.sh setup
 
       # --- IMPORT SECRETS ---
       - name: Import GPG Key
@@ -48,8 +50,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          scripts/ironbook.sh release "${GITHUB_REF_NAME#v}"
+        run: scripts/ironbook.sh release "${GITHUB_REF_NAME#v}"
 
       # --- PUBLISH ---
       - name: Upload All Release Assets

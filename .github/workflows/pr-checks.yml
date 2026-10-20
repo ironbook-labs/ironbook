@@ -19,9 +19,11 @@ jobs:
           install: true
           cache: true
 
+      - name: Set up cargo-binstall globally
+        run: mise use -g cargo-binstall
+
       - name: Run project setup script
-        run: |
-          scripts/ironbook.sh setup
+        run: scripts/ironbook.sh setup
 
       - name: Run pre-commit checks
         run: mise exec -- pre-commit run --hook-stage pre-push --all-files
