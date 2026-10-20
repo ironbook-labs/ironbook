@@ -1,7 +1,7 @@
 [tools]
 rust = { version = "1.95.0", components = ["rustfmt", "clippy"], targets = ["x86_64-pc-windows-gnu"] }
-"cargo:cargo-watch" = "8.5.3"
-"cargo:sqlx-cli" = { version = "0.9.0", features = ["postgres", "rustls"] }
+"github:passcod/cargo-watch" = "8.5.3"
+"cargo:sqlx-cli" = "0.9.0"
 
 [tasks."setup"]
 description = "Setup API"
@@ -25,7 +25,7 @@ run = "mise exec -- cargo test --features integration-tests"
 [tasks."db:up"]
 description = "Starts the ironbook_db service from compose.yaml"
 dir = "../../infra/docker/compose"
-run = "docker compose -f compose.yaml up ironbook_db -d"
+run = "docker compose -f compose.yaml up ironbook_db -d && sleep 5"
 
 [tasks."db:down"]
 description = "Stops the ironbook_db service from compose.yaml"

@@ -22,13 +22,25 @@ FIY8CL+cHJJ021pIKah5awEA/g1b7J7VVOaX59AElX75Dx2VEyKbeoigtGURUn7+
 EOF
 )
 
-# Prerequisites check
+# Prerequisites check with user-friendly installation advice
+MISSING_CMDS=""
 for cmd in curl jq gpg unzip; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "Error: Required command '$cmd' is not installed." >&2
-    exit 1
+    MISSING_CMDS="${MISSING_CMDS} $cmd"
   fi
 done
+
+if [ -n "$MISSING_CMDS" ]; then
+  echo "Error: The following required command(s) are missing:$MISSING_CMDS" >&2
+  echo "" >&2
+  echo "Iron Book requires these tools to download, verify, and install the application." >&2
+  echo "Please install them using your system's package manager and re-run the installer:" >&2
+  echo "  - Debian / Ubuntu: sudo apt update && sudo apt install curl jq gnupg unzip" >&2
+  echo "  - Fedora / RHEL:   sudo dnf install curl jq gnupg unzip" >&2
+  echo "  - Arch Linux:    sudo pacman -S curl jq gnupg unzip" >&2
+  echo "  - Alpine Linux:  sudo apk add curl jq gnupg unzip" >&2
+  exit 1
+fi
 
 # Platform check: only the Linux x64 build is currently released. Refuse
 # early on anything else, before prompting or touching ~/.local.
@@ -79,6 +91,23 @@ API_RESPONSE=$(curl -fsSL "$API_URL") || {
   exit 1
 }
 
+# Validate JSON response and handle API error conditions gracefully
+if ! echo "$API_RESPONSE" | jq -e . >/dev/null 2>&1; then
+  echo "Error: Received invalid JSON response from GitHub API (possible captive portal or network proxy)." >&2
+  exit 1
+fi
+
+API_MESSAGE=$(echo "$API_RESPONSE" | jq -r '.message // empty')
+if [ -n "$API_MESSAGE" ] && [ "$API_MESSAGE" != "null" ]; then
+  echo "Error from GitHub API: ${API_MESSAGE}" >&2
+  if [ "$IS_LIST" = false ]; then
+    echo "Hint: If no stable release exists yet, try running the installer again and select the [p]re-release channel." >&2
+  else
+    echo "Hint: If you are hitting API rate limits, please try again later." >&2
+  fi
+  exit 1
+fi
+
 if [ "$IS_LIST" = true ]; then
   ASSETS_JSON=$(echo "$API_RESPONSE" | jq -r '.[0].assets // empty')
 else
@@ -87,15 +116,13 @@ fi
 
 if [ -z "$ASSETS_JSON" ] || [ "$ASSETS_JSON" = "null" ]; then
   echo "Error: Could not retrieve release assets from GitHub API." >&2
+  if [ "$IS_LIST" = false ]; then
+    echo "Hint: If no stable release exists yet, try selecting the [p]re-release channel." >&2
+  fi
   exit 1
 fi
 
 # Only install the Linux Desktop release.
-#
-# Example:
-#   ironbook-desktop-v0.1.0-alpha-linux-x64.zip
-#
-# Everything else in the GitHub release is ignored.
 ZIP_NAME=$(echo "$ASSETS_JSON" | jq -r '
   .[]
   | select(
@@ -174,7 +201,7 @@ else
   exit 1
 fi
 
-# 5. Extraction & Path Setup
+# 5. Extraction & Path Setup (with atomic backup rotation)
 TARGET_SHARE="${HOME}/.local/share/ironbook"
 TARGET_BIN="${HOME}/.local/bin"
 TARGET_APPS="${HOME}/.local/share/applications"
@@ -182,9 +209,7 @@ TARGET_APPS="${HOME}/.local/share/applications"
 mkdir -p "$TARGET_BIN" "$TARGET_APPS" "${HOME}/.local/share"
 
 echo "Extracting application..."
-rm -rf "$TARGET_SHARE"
-mkdir -p "$TARGET_SHARE"
-
+mkdir -p "$TMP_DIR/extracted"
 unzip -q "$ZIP_FILE" -d "$TMP_DIR/extracted"
 
 # Handle top-level directory flattening inside zip if necessary.
@@ -192,24 +217,21 @@ EXTRACTED_CONTENT=$(ls -A "$TMP_DIR/extracted")
 
 if [ "$(echo "$EXTRACTED_CONTENT" | wc -l)" -eq 1 ] \
   && [ -d "$TMP_DIR/extracted/$EXTRACTED_CONTENT" ]; then
-
   SRC_DIR="$TMP_DIR/extracted/$EXTRACTED_CONTENT"
 else
   SRC_DIR="$TMP_DIR/extracted"
 fi
 
-# Copy the flattened contents (trailing `/.` includes dotfiles, which a
-# `*` glob would silently skip) instead of glob-moving them.
-cp -a "${SRC_DIR}/." "$TARGET_SHARE/"
+NEW_SHARE="${TMP_DIR}/new_ironbook"
+mkdir -p "$NEW_SHARE"
+cp -a "${SRC_DIR}/." "$NEW_SHARE/"
 rm -rf "$TMP_DIR/extracted"
 
 # Ensure main binary is executable.
-chmod +x "${TARGET_SHARE}/ironbook"
+chmod +x "${NEW_SHARE}/ironbook"
 
-# 6. Generate embedded Uninstaller inside ~/.local/share/ironbook/
-echo "Embedding uninstaller..."
-
-cat << 'EOF' > "${TARGET_SHARE}/uninstall.sh"
+# 6. Generate embedded Uninstaller inside NEW_SHARE
+cat << 'EOF' > "${NEW_SHARE}/uninstall.sh"
 #!/usr/bin/env sh
 set -eu
 
@@ -223,9 +245,6 @@ DATA_DIR="${HOME}/.local/share/ironbook_data"
 echo "Uninstalling Iron Book..."
 
 printf "\nDo you also want to remove persistent app configuration and user databases? [y/N]: "
-# With `set -eu`, `read` failing at EOF (non-interactive stdin, e.g.
-# `ironbook --uninstall < /dev/null` or CI) would abort mid-uninstall.
-# Default to keeping data in that case.
 read -r REMOVE_DATA || REMOVE_DATA=n
 
 case "$REMOVE_DATA" in
@@ -261,8 +280,6 @@ if command -v update-desktop-database >/dev/null 2>&1; then
     2>/dev/null || true
 fi
 
-# Remove the launcher wrapper LAST: if the script is interrupted before this
-# point, `ironbook --uninstall` still works to finish the job.
 if [ -f "$TARGET_BIN" ]; then
   rm -f "$TARGET_BIN"
   echo "Removed wrapper script: ${TARGET_BIN}"
@@ -271,7 +288,18 @@ fi
 echo "Iron Book has been successfully uninstalled."
 EOF
 
-chmod +x "${TARGET_SHARE}/uninstall.sh"
+chmod +x "${NEW_SHARE}/uninstall.sh"
+
+# Perform atomic switch using backup rotation
+BACKUP_SHARE="${TARGET_SHARE}.bak"
+rm -rf "$BACKUP_SHARE"
+
+if [ -d "$TARGET_SHARE" ]; then
+  mv "$TARGET_SHARE" "$BACKUP_SHARE"
+fi
+
+mv "$NEW_SHARE" "$TARGET_SHARE"
+rm -rf "$BACKUP_SHARE"
 
 # 7. Wrapper script with --uninstall check
 echo "Creating launcher wrapper in ${TARGET_BIN}/ironbook..."

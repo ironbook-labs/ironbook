@@ -6,7 +6,9 @@
 - [#172]: Added CPU Architecture check.
 - [#186]: Added production docker deployment for `api`, `home`, and `web`.
 - [#53]: Added hashing to API Tokens.
-- [#181]: Revamped the entire `.http` files
+- [#181]: Revamped the entire `.http` files.
+- [#175]: Linux installer now gives clear error messages about required dependencies missing.
+- [#173]: Linux installe rnow gives clear error messages about GitHub API errors.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
@@ -34,6 +36,7 @@
 - [#144]: Distributed `/scripts/build/build.sh` into smaller scripts.
 - [#95]: Distributed `/scripts/setup/setup.sh` into smaller scripts.
 - [#102]: Separated pre commit and pre push tests.
+- [#193]: Removed compiling of `cargo-watch` in favor of using binary.
 
 ### Fixed
 - [#120]: Updated the path to the `/scripts/iron_book.sh` in `/.github/workflows/release.yml`.
@@ -48,3 +51,5 @@
 - [#105]: Fixed Docs site not being user friendly on mobiles.
 - [#80]: Now organization GPG key is used to sign releases.
 - [#180]: A single owner can now have multiple clients.
+- [#170]: Linux installer no longer fails and leaves installation broken.
+- [#197]: Fixed Django warning of a static directory not existing.
