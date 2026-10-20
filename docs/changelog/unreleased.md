@@ -54,3 +54,4 @@
 - [#180]: A single owner can now have multiple clients.
 - [#170]: Linux installer no longer fails and leaves installation broken.
 - [#197]: Fixed Django warning of a static directory not existing.
+- [#195]: Setup now adds the user to the `docker` group and requests to restart the system.
