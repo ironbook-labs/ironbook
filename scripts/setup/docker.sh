@@ -38,10 +38,12 @@ ensure_docker_service() {
         fi
     fi
 
+    run_as_root usermod -aG docker $USER
     echo ""
     echo "❌ Docker daemon could not be started."
     echo ""
     echo "Please start Docker manually and run setup again."
+    echo "Or if the Docker was just installed by the setup, then please restart your system to let the group appending take place."
 
     return 1
 }
