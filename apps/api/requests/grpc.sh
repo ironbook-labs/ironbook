@@ -24,7 +24,7 @@ fi
 
 # Dispatcher to handle command line arguments
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 {grpc_greet|grpc_health_report|grpc_get_user_by_id|grpc_search_user_by_email|grpc_search_user_by_username|grpc_register|grpc_login|grpc_generate_api_token} [arguments...]"
+    echo "Usage: $0 {get_greet|get_health_report|get_user_by_id|get_search_user_by_email|get_search_user_by_username|post_register|post_login|post_generate_api_token} [arguments...]"
     exit 1
 fi
 

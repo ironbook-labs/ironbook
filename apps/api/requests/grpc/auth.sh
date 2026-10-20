@@ -1,4 +1,4 @@
-grpc_register() {
+post_register() {
     local api_token="${1:-}"
     local email="${2:-$DEFAULT_EMAIL}"
     local username="${3:-$DEFAULT_USERNAME}"
@@ -14,7 +14,7 @@ grpc_register() {
     echo ""
 }
 
-grpc_login() {
+post_login() {
     local api_token="${1:-}"
     local email="${2:-$DEFAULT_EMAIL}"
     local password="${4:-$DEFAULT_PASSWORD}"

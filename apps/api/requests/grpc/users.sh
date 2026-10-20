@@ -1,4 +1,4 @@
-grpc_get_user_by_id() {
+get_user_by_id() {
     local id="${1:-$DEFAULT_ID}"
 
     echo "gRPC ${GRPC_ADDR} users.UsersService/GetById"
@@ -6,7 +6,7 @@ grpc_get_user_by_id() {
     echo ""
 }
 
-grpc_search_user_by_email() {
+get_search_user_by_email() {
     local email="${1:-$DEFAULT_EMAIL}"
 
     echo "gRPC ${GRPC_ADDR} users.UsersService/Search (email)"
@@ -14,7 +14,7 @@ grpc_search_user_by_email() {
     echo ""
 }
 
-grpc_search_user_by_username() {
+get_search_user_by_username() {
     local username="${1:-$DEFAULT_USERNAME}"
 
     echo "gRPC ${GRPC_ADDR} users.UsersService/Search (username)"
