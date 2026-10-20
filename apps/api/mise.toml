@@ -25,7 +25,7 @@ run = "mise exec -- cargo test --features integration-tests"
 [tasks."db:up"]
 description = "Starts the ironbook_db service from compose.yaml"
 dir = "../../infra/docker/compose"
-run = "docker compose -f compose.yaml up ironbook_db -d"
+run = "docker compose -f compose.yaml up ironbook_db -d && sleep 5"
 
 [tasks."db:down"]
 description = "Stops the ironbook_db service from compose.yaml"

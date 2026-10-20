@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cmd_help() {
-    echo "Usage: ./ironbook.sh [command] [options]"
+    echo "Usage: ironbook [command] [options]"
     echo ""
     echo "Commands:"
     echo "  get-tree                Generate directory structure."
