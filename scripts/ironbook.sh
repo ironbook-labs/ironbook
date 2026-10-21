@@ -45,7 +45,8 @@ case "$COMMAND" in
         ;;
 
     setup)
-        source "$SCRIPTS_DIR/setup/setup.sh"
+        shift
+        source "$SCRIPTS_DIR/setup/setup.sh" "$@"
         ;;
 
     help|--help|-h)

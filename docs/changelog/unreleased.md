@@ -11,6 +11,7 @@
 - [#173]: Linux installe rnow gives clear error messages about GitHub API errors.
 - [#185]: Added GRPC endpoint tester scripts in `/apps/api/requests/grpc`.
 - [#205]: Added `doas` support in setup.
+- [#199]: Added support for `--no-*` flags in `setup.sh`.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
