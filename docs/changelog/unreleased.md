@@ -39,6 +39,7 @@
 - [#95]: Distributed `/scripts/setup/setup.sh` into smaller scripts.
 - [#102]: Separated pre commit and pre push tests.
 - [#193]: Removed compiling of `cargo-watch` in favor of using binary.
+- [#207]: Updated workflows for CI/CD to use flags.
 
 ### Fixed
 - [#120]: Updated the path to the `/scripts/iron_book.sh` in `/.github/workflows/release.yml`.
