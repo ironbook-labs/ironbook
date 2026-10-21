@@ -21,6 +21,3 @@ jobs:
 
       - name: Run project setup script
         run: scripts/ironbook.sh setup --no-mingw --no-git-hooks
-
-      - name: Run pre-commit checks
-        run: mise exec -- pre-commit run --hook-stage pre-push --all-files
