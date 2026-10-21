@@ -10,6 +10,7 @@
 - [#175]: Linux installer now gives clear error messages about required dependencies missing.
 - [#173]: Linux installe rnow gives clear error messages about GitHub API errors.
 - [#185]: Added `grpc` endpoint tester scripts.
+- [#205]: Added `doas` support in setup.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
