@@ -23,8 +23,13 @@ jobs:
           install: true
           cache: true
 
-      - name: Run project setup script
+      - name: Run project setup script --no-docker --no-project-setup --no-git-hooks
         run: scripts/ironbook.sh setup
+
+      - name: Manually download dependencies for home and android
+        run: |
+            mise run //apps/home:setup
+            mise run //apps/android:setup
 
       # --- IMPORT SECRETS ---
       - name: Import GPG Key

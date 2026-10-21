@@ -40,6 +40,7 @@
 - [#95]: Distributed `/scripts/setup/setup.sh` into smaller scripts.
 - [#102]: Separated pre commit and pre push tests.
 - [#193]: Removed compiling of `cargo-watch` in favor of using binary.
+- [#207]: Updated workflows for CI/CD to use flags.
 - [#209]: Update the design of, and removed redundancies from `/.github/PULL_REQUEST_TEMPLATE.md`.
 
 ### Fixed
