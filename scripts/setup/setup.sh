@@ -38,6 +38,8 @@ run_as_root() {
         "$@"
     elif command -v sudo >/dev/null 2>&1; then
         sudo "$@"
+    elif command -v doas >/dev/null 2>&1; then
+        doas "$@"
     else
         echo "❌ Need root privileges but neither running as root nor is 'sudo' available."
         exit 1
