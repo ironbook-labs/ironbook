@@ -12,6 +12,7 @@
 - [#185]: Added GRPC endpoint tester scripts in `/apps/api/requests/grpc`.
 - [#205]: Added `doas` support in setup.
 - [#199]: Added support for `--no-*` flags in `setup.sh`.
+- [#198]: Setup now runs `pre-commit` tests too.
 
 ### Removed
 - [#76]: Removed `/assets` directory.

@@ -21,4 +21,5 @@ cmd_help() {
     echo "    --no-mise-install     Skip installing sub project dependencies from Mise. Set to be true if --no-mise is passed."
     echo "    --no-project-setup    Skip running setup tasks of sub projects from Mise. Set to be true if --no-mise is passed."
     echo "    --no-git-hooks        Skip setting up pre-commit hooks. Set to be true if --no-mise or --no-mise-install is passed."
+    echo "    --no-pre-commit-test  Skip running the pre-commit tests. Set to be true if --no-mise or --no-project-setup is passed."
 }

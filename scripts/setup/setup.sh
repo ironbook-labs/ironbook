@@ -57,6 +57,7 @@ NO_MISE=0
 NO_MISE_INSTALL=0
 NO_PROJECT_SETUP=0
 NO_GIT_HOOKS=0
+NO_PRE_COMMIT_TEST=0
 
 # Parse the flags
 while [[ "$#" -gt 0 ]]; do
@@ -88,6 +89,7 @@ while [[ "$#" -gt 0 ]]; do
             NO_MISE_INSTALL=1
             NO_PROJECT_SETUP=1
             NO_GIT_HOOKS=1
+            NO_GIT_HOOKS_TEST=1
             ;;
         --no-mise-install)
             NO_MISE_INSTALL=1
@@ -95,9 +97,13 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         --no-project-setup)
             NO_PROJECT_SETUP=1
+            NO_GIT_HOOKS_TEST=1
             ;;
         --no-git-hooks)
             NO_GIT_HOOKS=1
+            ;;
+        --no-pre-commit-test)
+            NO_PRE_COMMIT_TEST=1
             ;;
         *)
             echo "Unknown option: $1"
@@ -167,6 +173,14 @@ if [ "$NO_GIT_HOOKS" -eq 0 ]; then
     setup_git_hooks
 else
     echo "Received --no-git-hooks, skipping setting up git hooks via pre-commit."
+fi
+
+if [ "$NO_PRE_COMMIT_TEST" -eq 0 ]; then
+    echo ""
+    echo "Running pre-commit tests."
+    mise exec -- pre-commit run --hook-stage pre-push --all-files
+else
+    echo "Received --no-pre-commit-test, skipping testing git hooks via pre-commit."
 fi
 
 echo ""
