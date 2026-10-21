@@ -105,12 +105,43 @@ ensure_docker_user_access() {
     return 2
 }
 
+# Starts all Docker Compose services and stops them again, so that their
+# images are downloaded (and built) and the services are fully initialized.
+setup_docker_services() {
+    local compose_dir="$ROOT_DIR/infra/docker/compose"
+
+    echo "🐳 Starting all Docker Compose services..."
+    echo "   (this downloads and builds the service images)"
+
+    if ! (cd "$compose_dir" && docker compose -f compose.yaml up -d); then
+        echo "❌ Failed to start the Docker Compose services."
+        return 1
+    fi
+
+    echo "✔ All Docker Compose services started."
+
+    echo ""
+    echo "🛑 Stopping the Docker Compose services..."
+
+    if ! (cd "$compose_dir" && docker compose -f compose.yaml down); then
+        echo "⚠ Could not stop the Docker Compose services."
+        echo ""
+        echo "Stop them manually with:"
+        echo "  docker compose -f $compose_dir/compose.yaml down"
+        return 1
+    fi
+
+    echo "✔ All Docker Compose services stopped."
+    return 0
+}
+
 setup_docker() {
     ensure_docker_service
     ensure_docker_compose
 
     if ensure_docker_user_access; then
-        return 0
+        setup_docker_services
+        return $?
     fi
 
     local status=$?
