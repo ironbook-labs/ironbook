@@ -33,24 +33,32 @@ install_system_packages() {
 
             local packages=()
 
-            if ! cmd_exists x86_64-w64-mingw32-gcc; then
-                packages+=(mingw-w64-gcc)
+            if [ "$NO_MINGW" -eq 0 ]; then
+                if ! cmd_exists x86_64-w64-mingw32-gcc; then
+                    packages+=(mingw-w64-gcc)
+                fi
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker)
+            if [ "$NO_DOCKER" -eq 0 ]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker)
+                fi
+
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose)
+                fi
             fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose)
+            if [ "$NO_CURL" -eq 0 ]; then
+                if ! cmd_exists curl; then
+                    packages+=(curl)
+                fi
             fi
 
-            if ! cmd_exists curl; then
-                packages+=(curl)
-            fi
-
-            if ! cmd_exists git; then
-                packages+=(git)
+            if [ "$NO_GIT" -eq 0 ]; then
+                if ! cmd_exists git; then
+                    packages+=(git)
+                fi
             fi
 
             if [[ "${#packages[@]}" -gt 0 ]]; then
@@ -65,24 +73,32 @@ install_system_packages() {
 
             local packages=()
 
-            if ! cmd_exists x86_64-w64-mingw32-gcc; then
-                packages+=(gcc-mingw-w64-x86-64)
+            if [ "$NO_MINGW" -eq 0 ]; then
+                if ! cmd_exists x86_64-w64-mingw32-gcc; then
+                    packages+=(gcc-mingw-w64-x86-64)
+                fi
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker.io)
+            if [ "$NO_DOCKER" -eq 0 ]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker.io)
+                fi
+
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose-v2)
+                fi
             fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose-v2)
+            if [ "$NO_CURL" -eq 0 ]; then
+                if ! cmd_exists curl; then
+                    packages+=(curl)
+                fi
             fi
 
-            if ! cmd_exists curl; then
-                packages+=(curl)
-            fi
-
-            if ! cmd_exists git; then
-                packages+=(git)
+            if [ "$NO_GIT" -eq 0 ]; then
+                if ! cmd_exists git; then
+                    packages+=(git)
+                fi
             fi
 
             if [[ "${#packages[@]}" -gt 0 ]]; then
@@ -95,24 +111,32 @@ install_system_packages() {
 
             local packages=()
 
-            if ! cmd_exists x86_64-w64-mingw32-gcc; then
-                packages+=(mingw64-gcc)
+            if [ "$NO_MINGW" -eq 0 ]; then
+                if ! cmd_exists x86_64-w64-mingw32-gcc; then
+                    packages+=(mingw64-gcc)
+                fi
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker)
+            if [ "$NO_DOCKER" -eq 0 ]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker)
+                fi
+
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose)
+                fi
             fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose)
+            if [ "$NO_CURL" -eq 0 ]; then
+                if ! cmd_exists curl; then
+                    packages+=(curl)
+                fi
             fi
 
-            if ! cmd_exists curl; then
-                packages+=(curl)
-            fi
-
-            if ! cmd_exists git; then
-                packages+=(git)
+            if [ "$NO_GIT" -eq 0 ]; then
+                if ! cmd_exists git; then
+                    packages+=(git)
+                fi
             fi
 
             if [[ "${#packages[@]}" -gt 0 ]]; then
@@ -125,34 +149,37 @@ install_system_packages() {
 
             local packages=()
 
-            if ! cmd_exists x86_64-w64-mingw32-gcc; then
-                packages+=(mingw64-cross-gcc)
+            if [ "$NO_MINGW" -eq 0 ]; then
+                if ! cmd_exists x86_64-w64-mingw32-gcc; then
+                    packages+=(mingw64-cross-gcc)
+                fi
             fi
 
-            if ! cmd_exists docker; then
-                packages+=(docker)
+            if [ "$NO_DOCKER" -eq 0 ]; then
+                if ! cmd_exists docker; then
+                    packages+=(docker)
+                fi
+
+                if ! docker compose version >/dev/null 2>&1; then
+                    packages+=(docker-compose)
+                fi
             fi
 
-            if ! docker compose version >/dev/null 2>&1; then
-                packages+=(docker-compose)
+            if [ "$NO_CURL" -eq 0 ]; then
+                if ! cmd_exists curl; then
+                    packages+=(curl)
+                fi
             fi
 
-            if ! cmd_exists curl; then
-                packages+=(curl)
-            fi
-
-            if ! cmd_exists git; then
-                packages+=(git)
+            if [ "$NO_GIT" -eq 0 ]; then
+                if ! cmd_exists git; then
+                    packages+=(git)
+                fi
             fi
 
             if [[ "${#packages[@]}" -gt 0 ]]; then
                 run_as_root zypper install -y "${packages[@]}"
             fi
-            ;;
-
-        nixos)
-            echo "❌ NixOS is not currently supported."
-            exit 1
             ;;
 
         *)
@@ -176,29 +203,45 @@ install_system_packages() {
 check_system_commands() {
     local missing=0
 
-    if ! cmd_exists x86_64-w64-mingw32-gcc; then
-        echo "❌ Required command not found: x86_64-w64-mingw32-gcc"
-        missing=1
+    if [ "$NO_MINGW" -eq 0 ]; then
+        if ! cmd_exists x86_64-w64-mingw32-gcc; then
+            echo "❌ Required command not found: x86_64-w64-mingw32-gcc"
+            missing=1
+        fi
+    else
+        echo "Received --no-mingw, skipping checking for it."
     fi
 
-    if ! cmd_exists docker; then
-        echo "❌ Required command not found: docker"
-        missing=1
+    if [ "$NO_DOCKER" -eq 0 ]; then
+        if ! cmd_exists docker; then
+            echo "❌ Required command not found: docker"
+            missing=1
+        fi
+
+        if ! docker compose version >/dev/null 2>&1; then
+            echo "❌ Docker Compose is not available."
+            missing=1
+        fi
+    else
+        echo "Received --no-docker, skipping checking for it."
     fi
 
-    if ! docker compose version >/dev/null 2>&1; then
-        echo "❌ Docker Compose is not available."
-        missing=1
+    if [ "$NO_CURL" -eq 0 ]; then
+        if ! cmd_exists curl; then
+            echo "❌ Required command not found: curl"
+            missing=1
+        fi
+    else
+        echo "Received --no-curl, skipping checking for it."
     fi
 
-    if ! cmd_exists curl; then
-        echo "❌ Required command not found: curl"
-        missing=1
-    fi
-
-    if ! cmd_exists git; then
-        echo "❌ Required command not found: git"
-        missing=1
+    if [ "$NO_GIT" -eq 0 ]; then
+        if ! cmd_exists git; then
+            echo "❌ Required command not found: git"
+            missing=1
+            fi
+    else
+        echo "Received --no-git, skipping checking for it."
     fi
 
     if [[ "$missing" -eq 1 ]]; then
