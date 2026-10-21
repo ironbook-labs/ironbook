@@ -30,8 +30,12 @@ install_mise() {
 setup_mise() {
     install_mise
 
-    echo "📦 Installing project toolchains via mise..."
-
     mise trust
-    mise install
+
+    if [ "$NO_MISE_INSTALL" -eq 0 ]; then
+        echo "📦 Installing project toolchains via mise..."
+        mise install
+    else
+        echo "Received --no-mise-install, skipping installation of sub project dependencies."
+    fi
 }

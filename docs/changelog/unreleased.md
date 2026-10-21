@@ -4,13 +4,14 @@
 - [#133]: Added `Windows` setup section in relative documentation.
 - [#104]: Added `README` files in all relative directores.
 - [#172]: Added CPU Architecture check.
-- [#186]: Added production docker deployment for `api`, `home`, and `web`.
+- [#186]: Added production docker deployment for `/apps/api`, `/apps/home`, and `/apps/web`.
 - [#53]: Added hashing to API Tokens.
-- [#181]: Revamped the entire `.http` files.
+- [#181]: Revamped the entire `/apps/api/http/*.http` files.
 - [#175]: Linux installer now gives clear error messages about required dependencies missing.
 - [#173]: Linux installe rnow gives clear error messages about GitHub API errors.
-- [#185]: Added `grpc` endpoint tester scripts.
+- [#185]: Added GRPC endpoint tester scripts in `/apps/api/requests/grpc`.
 - [#205]: Added `doas` support in setup.
+- [#199]: Added support for `--no-*` flags in `setup.sh`.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
@@ -40,20 +41,21 @@
 - [#102]: Separated pre commit and pre push tests.
 - [#193]: Removed compiling of `cargo-watch` in favor of using binary.
 - [#207]: Updated workflows for CI/CD to use flags.
+- [#209]: Update the design of, and removed redundancies from `/.github/PULL_REQUEST_TEMPLATE.md`.
 
 ### Fixed
 - [#120]: Updated the path to the `/scripts/iron_book.sh` in `/.github/workflows/release.yml`.
 - [#122]: Fixed `/apps/web` version not being updated automatically.
-- [#108]: Fixed `ironbook_db` being mapped to host port in prod.
+- [#108]: Fixed `ironbook_db` service in `/infra/docker/compose/compose.yaml` being mapped to host port in prod.
 - [#135]: Fixed mise failing on systems which don't have symlinks. Now mise installs to default installation directory.
 - [#151]: Fixed `pre-commit install` failing.
 - [#134]: Fixed setup failing when already running as root or `sudo` wasn't available.
-- [#171]: Fixed uninstall script breaking if interrupted.
-- [#174]: Fixed Linux installer not moving dotfiles while installing.
-- [#169]: Fixed Linux installer not failing if the download was interrupted.
-- [#105]: Fixed Docs site not being user friendly on mobiles.
+- [#171]: Fixed Linux Desktop uninstall script breaking if interrupted.
+- [#174]: Fixed `/scripts/install/linux/installer.sh` not moving dotfiles while installing.
+- [#169]: Fixed `/scripts/install/linux/installer.sh` not failing loudly with clear error, if the download was interrupted.
+- [#105]: Fixed `/apps/home` not being user friendly on mobiles.
 - [#80]: Now organization GPG key is used to sign releases.
 - [#180]: A single owner can now have multiple clients.
-- [#170]: Linux installer no longer fails and leaves installation broken.
-- [#197]: Fixed Django warning of a static directory not existing.
+- [#170]: `/scripts/install/linux/installer.sh` no longer leaves installation broken upon failure.
+- [#197]: Fixed `/apps/web` warning of a static directory not existing.
 - [#195]: Setup now adds the user to the `docker` group and requests to restart the system.
