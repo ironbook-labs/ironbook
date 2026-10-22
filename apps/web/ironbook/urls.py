@@ -7,23 +7,12 @@ from django.views.generic.base import RedirectView
 
 from ironbook import views
 
-
-class FaviconRedirectView(RedirectView):
-    permanent = True
-
-    def get_redirect_url(self, *args, **kwargs):
-        # Resolve at request time: staticfiles_storage.url() raises
-        # "Missing staticfiles manifest entry" at import time when
-        # collectstatic has not run yet (e.g. during `tailwind build`
-        # in the Docker image build), which breaks every manage.py
-        # command on a fresh checkout.
-        return staticfiles_storage.url("img/favicon.png")
-
-
 urlpatterns = [
     re_path(
         r"^favicon\.ico$",
-        FaviconRedirectView.as_view(),
+        RedirectView.as_view(
+            url=staticfiles_storage.url("img/favicon.png"), permanent=True
+        ),
     ),
     path(
         "robots.txt",
