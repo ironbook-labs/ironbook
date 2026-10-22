@@ -2,6 +2,7 @@
 
 ROOT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
 SCRIPTS_DIR="$ROOT_DIR/scripts"
+COMPOSER_DIR="$ROOT_DIR/infra/docker/compose"
 APPS_DIR="$ROOT_DIR/apps"
 API_DIR="$APPS_DIR/api"
 HOME_DIR="$APPS_DIR/home"
