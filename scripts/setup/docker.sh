@@ -97,7 +97,7 @@ ensure_docker_user_access() {
     echo "⚠ A new login session is required before Docker can be used."
     echo "  Please log out and back in, then run:"
     echo ""
-    echo "    ./ironbook setup"
+    echo "    ironbook setup"
     echo ""
 
     # This is a successful setup step, but the current shell cannot
@@ -105,12 +105,45 @@ ensure_docker_user_access() {
     return 2
 }
 
+# Starts all Docker Compose services and stops them again, so that their
+# images are downloaded (and built) and the services are fully initialized.
+setup_docker_services() {
+    echo "🐳 Starting all Docker Compose services..."
+    echo "   (this downloads and builds the service images)"
+
+    if ! (cd "$COMPOSE_DIR" && docker compose -f compose.yaml up -d); then
+        echo "❌ Failed to start the Docker Compose services."
+        return 1
+    fi
+
+    echo "✔ All Docker Compose services started."
+
+    echo ""
+    echo "🛑 Stopping the Docker Compose services..."
+
+    if ! (cd "$COMPOSE_DIR" && docker compose -f compose.yaml down); then
+        echo "⚠ Could not stop the Docker Compose services."
+        echo ""
+        echo "Stop them manually with:"
+        echo "  docker compose -f $COMPOSE_DIR/compose.yaml down"
+        return 1
+    fi
+
+    echo "✔ All Docker Compose services stopped."
+    return 0
+}
+
 setup_docker() {
     ensure_docker_service
     ensure_docker_compose
 
     if ensure_docker_user_access; then
-        return 0
+        if [ "$NO_DOCKER_SERVICES" -eq 0 ]; then
+            setup_docker_services
+        else
+            echo "Received --no-docker-services, skipping setting them up."
+        fi
+        return $?
     fi
 
     local status=$?

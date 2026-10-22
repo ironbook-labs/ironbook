@@ -13,6 +13,7 @@
 - [#205]: Added `doas` support in setup.
 - [#199]: Added support for `--no-*` flags in `setup.sh`.
 - [#198]: Setup now runs `pre-commit` tests too.
+- [#194]: Added `setup_docker_services()` so that docker services are now primed on the setup with optional disable flag.
 
 ### Removed
 - [#76]: Removed `/assets` directory.

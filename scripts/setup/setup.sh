@@ -53,6 +53,7 @@ NO_MINGW=0
 NO_CURL=0
 NO_GIT=0
 NO_DOCKER=0
+NO_DOCKER_SERVICES=0
 NO_MISE=0
 NO_MISE_INSTALL=0
 NO_PROJECT_SETUP=0
@@ -71,6 +72,7 @@ while [[ "$#" -gt 0 ]]; do
             NO_CURL=1
             NO_GIT=1
             NO_DOCKER=1
+            NO_DOCKER_SERVICES=1
             ;;
         --no-mingw)
             NO_MINGW=1
@@ -83,6 +85,10 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         --no-docker)
             NO_DOCKER=1
+            NO_DOCKER_SERVICES=1
+            ;;
+        --no-docker-services)
+            NO_DOCKER_SERVICES=1
             ;;
         --no-mise)
             NO_MISE=1
