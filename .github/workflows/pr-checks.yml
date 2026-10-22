@@ -20,4 +20,4 @@ jobs:
           cache: true
 
       - name: Run project setup script
-        run: scripts/ironbook.sh setup --no-mingw --no-git-hooks
+        run: scripts/ironbook.sh setup --no-mingw --no-git-hooks --no-docker-services
