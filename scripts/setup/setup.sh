@@ -87,6 +87,9 @@ while [[ "$#" -gt 0 ]]; do
             NO_DOCKER=1
             NO_DOCKER_SERVICES=1
             ;;
+        --no-docker-services)
+            NO_DOCKER_SERVICES=1
+            ;;
         --no-mise)
             NO_MISE=1
             NO_MISE_INSTALL=1
