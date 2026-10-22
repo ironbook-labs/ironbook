@@ -17,6 +17,7 @@ cmd_help() {
     echo "    --no-curl             Skip setting up Curl. Set to be true if --no-system-commands is passed."
     echo "    --no-git              Skip setting up Git. Set to be true if --no-system-commands is passed."
     echo "    --no-docker           Skip setting up Docker and Docker Compose. Set to be true if --no-system-commands is passed."
+    echo "    --no-docker-services  Skip setting up Docker services. Set to be true if --no-docker-services or --no-system-commands is passed."
     echo "    --no-mise             Skip setting up Mise."
     echo "    --no-mise-install     Skip installing sub project dependencies from Mise. Set to be true if --no-mise is passed."
     echo "    --no-project-setup    Skip running setup tasks of sub projects from Mise. Set to be true if --no-mise is passed."
