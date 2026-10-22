@@ -138,7 +138,11 @@ setup_docker() {
     ensure_docker_compose
 
     if ensure_docker_user_access; then
-        setup_docker_services
+        if [ "$NO_DOCKER_SERVICES" -eq 0 ]; then
+            setup_docker_services
+        else
+            echo "Received --no-docker-services, skipping setting them up."
+        fi
         return $?
     fi
 
