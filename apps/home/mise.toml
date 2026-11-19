@@ -4,7 +4,10 @@ pnpm = "12.8.1"
 
 [tasks."setup"]
 description = "Setup NextJS Documentation Site"
-run = "pnpm install"
+run = [
+  "pnpm install",
+  "pnpm exec next telemetry disable"
+]
 
 [tasks."dev"]
 description = "Run NextJS Dev Server"
