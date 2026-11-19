@@ -1,4 +1,4 @@
-FROM debian:13-slim
+FROM docker.io/debian:13-slim
 
 COPY --from=ghcr.io/jdx/mise:2026.10.13 /usr/local/bin/mise /usr/local/bin/mise
 

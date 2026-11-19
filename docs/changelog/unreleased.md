@@ -2,18 +2,19 @@
 - [#81]: Added `/docs/CODEOWNDERS`.
 - [#77]: Added structured versioned files for changelog.
 - [#133]: Added `Windows` setup section in relative documentation.
-- [#104]: Added `README` files in all relative directores.
+- [#104]: Added `README` files in all relative directories.
 - [#172]: Added CPU Architecture check.
 - [#186]: Added production docker deployment for `/apps/api`, `/apps/home`, and `/apps/web`.
 - [#53]: Added hashing to API Tokens.
 - [#181]: Revamped the entire `/apps/api/http/*.http` files.
 - [#175]: Linux installer now gives clear error messages about required dependencies missing.
-- [#173]: Linux installe rnow gives clear error messages about GitHub API errors.
+- [#173]: Linux installer now gives clear error messages about GitHub API errors.
 - [#185]: Added GRPC endpoint tester scripts in `/apps/api/requests/grpc`.
 - [#205]: Added `doas` support in setup.
 - [#199]: Added support for `--no-*` flags in `setup.sh`.
 - [#198]: Setup now runs `pre-commit` tests too.
 - [#194]: Added `setup_docker_services()` so that docker services are now primed on the setup with optional disable flag.
+- [#4]: Added `Nix Flakes` to manage system dependencies.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
@@ -49,7 +50,7 @@
 - [#120]: Updated the path to the `/scripts/iron_book.sh` in `/.github/workflows/release.yml`.
 - [#122]: Fixed `/apps/web` version not being updated automatically.
 - [#108]: Fixed `ironbook_db` service in `/infra/docker/compose/compose.yaml` being mapped to host port in prod.
-- [#135]: Fixed mise failing on systems which don't have symlinks. Now mise installs to default installation directory.
+- [#135]: Fixed `mise` failing on systems which don't have symlinks. Now `mise` installs to default installation directory.
 - [#151]: Fixed `pre-commit install` failing.
 - [#134]: Fixed setup failing when already running as root or `sudo` wasn't available.
 - [#171]: Fixed Linux Desktop uninstall script breaking if interrupted.
