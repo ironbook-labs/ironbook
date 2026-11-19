@@ -9,12 +9,13 @@ dependencies = [
     "django-cors-headers==4.9.0",
     "django-environ==0.13.0",
     "django-tailwind[cookiecutter,honcho,reload]==4.4.2",
-    "djangorestframework==3.17.2",
+    "djangorestframework==3.18.2",
     "honcho==2.0.0",
     "whitenoise==6.12.0",
-    "sqlparse>=0.6.0",
-    "uvicorn>=0.54.0", # Launcher.py needs to be added to run the prod server or from mise task (preferably not)
-    "urllib3>=2.8.0",
+    "sqlparse==0.6.0",
+    "uvicorn==0.54.0",
+    "urllib3==2.8.0",
+    "certifi==2026.10.18",
 ]
 
 [dependency-groups]
