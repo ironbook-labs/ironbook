@@ -358,22 +358,10 @@ export default function Docs() {
                   <li>
                     Install{" "}
                     <a
-                      href="https://mise.jdx.dev"
+                      href="https://nixos.org/download/"
                       className="font-medium text-blue-600 hover:underline"
                     >
-                      Mise,
-                    </a>{" "}
-                    <a
-                      href="https://docs.docker.com/desktop/setup/install/linux/"
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      Docker, DockerCLI, & Docker Compose,
-                    </a>{" "}
-                    <a
-                      href="https://www.mingw-w64.org/"
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      MinGW-w64-GCC
+                      Nix
                     </a>
                   </li>
 
@@ -382,7 +370,7 @@ export default function Docs() {
                   <li>
                     Run{" "}
                     <code className="rounded bg-zinc-200 px-2 py-1 text-sm dark:bg-zinc-800">
-                      scripts/ironbook.sh setup
+                      ./scripts/ironbook.sh setup
                     </code>
                   </li>
                 </ol>
