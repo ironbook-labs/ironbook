@@ -6,7 +6,7 @@ pnpm = "12.8.1"
 description = "Setup NextJS Documentation Site"
 run = [
   "pnpm install",
-  "pnpm exec next telemetry disable"
+  # "pnpm exec next telemetry disable" # Should be enabled somehow. Disabled for right now because this command needs the source code before being ran, which is not yet done in release.yml workflow and Dockerfile.
 ]
 
 [tasks."dev"]
