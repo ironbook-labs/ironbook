@@ -69,8 +69,10 @@ jobs:
           mise exec -- java -version 2>&1
 
           echo "Gradle:"
-          cd apps/android
-          mise exec -- ./gradlew --version
+          (
+            cd apps/android
+            mise exec -- ./gradlew --version
+          )
 
           echo "Android SDK:"
           echo "ANDROID_HOME=${ANDROID_HOME:-NOT SET}"
@@ -138,6 +140,20 @@ jobs:
           echo "Private key password accepted."
 
           echo "::endgroup::"
+
+          echo "JAVA_HOME=${JAVA_HOME:-NOT SET}"
+          echo "Java executable:"
+          command -v java
+
+          echo "Mise Java:"
+          mise current java
+          mise which java
+
+          echo "Gradle JVM:"
+          (
+            cd apps/android
+            ./gradlew --version
+          )
 
       # --- BUILD ---
       - name: Build Release
