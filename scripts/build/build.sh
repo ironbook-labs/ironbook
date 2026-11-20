@@ -55,7 +55,7 @@ build_android() {
 
   (
     cd "$ANDROID_DIR"
-    ./gradlew assembleRelease
+    mise exec -- ./gradlew assembleRelease --stacktrace
   )
 
   echo "✔ Android build complete."
