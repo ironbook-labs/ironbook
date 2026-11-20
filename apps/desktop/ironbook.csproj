@@ -8,7 +8,7 @@
     <AssemblyName>ironbook</AssemblyName>
     <RootNamespace>ironbook</RootNamespace>
 
-    <Version>0.1.2-alpha</Version>
+    <Version>0.1.3-alpha</Version>
     <DefaultItemExcludes>$(DefaultItemExcludes);tests\**</DefaultItemExcludes>
   </PropertyGroup>
 

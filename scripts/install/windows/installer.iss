@@ -1,6 +1,6 @@
 [Setup]
 AppName=IronBook
-AppVersion=0.1.2-alpha
+AppVersion=0.1.3-alpha
 AppPublisher=Abled-Taha
 DefaultDirName={localappdata}\Programs\IronBook
 DefaultGroupName=IronBook

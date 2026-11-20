@@ -1,6 +1,6 @@
 [project]
 name = "ironbook"
-version = "0.1.2-alpha"
+version = "0.1.3-alpha"
 description = "A Digital Dinancial Ledger"
 readme = "README.md"
 requires-python = "==3.11.9"
