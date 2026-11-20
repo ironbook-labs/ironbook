@@ -1,19 +1,19 @@
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.shortcuts import redirect
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
-from django.views.generic.base import RedirectView
 
 from ironbook import views
 
+
+def favicon(request):
+    return redirect(staticfiles_storage.url("img/favicon.png"), permanent=True)
+
+
 urlpatterns = [
-    re_path(
-        r"^favicon\.ico$",
-        RedirectView.as_view(
-            url=staticfiles_storage.url("img/favicon.png"), permanent=True
-        ),
-    ),
+    re_path(r"^favicon\.ico$", favicon),
     path(
         "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
