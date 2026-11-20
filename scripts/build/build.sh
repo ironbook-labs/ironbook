@@ -53,10 +53,22 @@ build_desktop() {
 build_android() {
   echo "🔨 Building Android..."
 
-  (
-    cd "$ANDROID_DIR"
-    mise exec -- ./gradlew assembleRelease --stacktrace
-  )
+  #(
+  #  cd "$ANDROID_DIR"
+  #  mise exec -- ./gradlew assembleRelease --stacktrace
+  #)
+  echo "Android signing diagnostics:"
+  echo "Working directory: $(pwd)"
+  echo "KEYSTORE_PATH: ${KEYSTORE_PATH:-NOT SET}"
+  echo "KEYSTORE_PASSWORD length: ${#KEYSTORE_PASSWORD}"
+  echo "KEY_ALIAS: ${KEY_ALIAS}"
+  echo "KEY_PASSWORD length: ${#KEY_PASSWORD}"
+
+  echo "Resolved keystore:"
+  realpath "$KEYSTORE_PATH"
+
+  echo "Gradle signing configuration:"
+  mise exec -- ./gradlew signingReport
 
   echo "✔ Android build complete."
 }
