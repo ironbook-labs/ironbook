@@ -24,7 +24,7 @@ jobs:
           cache: true
 
       - name: Run project setup script
-        run: scripts/ironbook.sh setup --no-docker --no-project-setup --no-git-hooks --no-pre-commit-test
+        run: scripts/ironbook.sh setup #--no-docker --no-project-setup --no-git-hooks --no-pre-commit-test
 
       - name: Manually download dependencies for home and android
         run: |
