@@ -72,6 +72,7 @@ jobs:
           (
             cd apps/android
             mise exec -- ./gradlew --version
+            mise exec -- java -version
           )
 
           echo "Android SDK:"
@@ -153,6 +154,7 @@ jobs:
           (
             cd apps/android
             ./gradlew --version
+            mise exec -- java -version
           )
 
       # --- BUILD ---
