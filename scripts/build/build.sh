@@ -81,7 +81,7 @@ build_windows_installer() {
 
   docker run --rm \
     -v "$installer_dir:/work" \
-    docker.io/amake/innosetup \
+    docker.io/amake/innosetup:innosetup6-bullseye \
     /work/installer.iss
 
   cp "$installer_dir/Output/IronBook-Setup.exe" \
